@@ -9,4 +9,5 @@ COPY . .
 RUN npm run build
 
 RUN npm install -g http-server
-CMD ["http-server", "dist/angular-devops", "-p", "4200"]
+CMD ["http-server", "dist/angular-devops/browser", "-p", "4200"]
+

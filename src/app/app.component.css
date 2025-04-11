@@ -1,0 +1,19 @@
+/* src/app/app.component.css */
+nav {
+    background-color: #f0f0f0;
+    padding: 10px;
+  }
+  
+  ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    padding: 0;
+  }
+  
+  li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+  }
+  

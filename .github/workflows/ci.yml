@@ -1,4 +1,4 @@
-name: CI Angular DevOps
+name: CI/CD Angular DevOps
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build-test:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -30,5 +30,13 @@ jobs:
       - name: Build Angular app
         run: npm run build
 
-      - name: Simulate deployment
-        run: echo "docker push angular-devops && docker run angular-devops"
+      - name: Build Docker image with tag
+        run: docker build -t angular-test:${{ github.run_number }} .
+
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Push Docker image to Docker Hub
+        run: |
+          docker tag angular-test:${{ github.run_number }} ${{ secrets.DOCKER_USERNAME }}/angular-test:${{ github.run_number }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/angular-test:${{ github.run_number }}
