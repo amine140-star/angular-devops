@@ -1,4 +1,4 @@
-name: CI for Angular App
+name: CI Angular DevOps
 
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Use Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
@@ -22,22 +22,23 @@ jobs:
         run: npm ci
 
       - name: Lint code
-        run: npm run lint || echo "Lint errors, but continue"
+        run: npm run lint
 
       - name: Run tests
-        run: npm test -- --watch=false --browsers=ChromeHeadless
+        run: npm run test -- --watch=false --browsers=ChromeHeadless
 
       - name: Build Angular app
         run: npm run build
 
       - name: Simulate deployment
-        run: echo "docker push mon-image-angular && docker run mon-image-angular"
+        run: echo "docker push angular-devops && docker run angular-devops"
 
-      - name: Create Git Tag
-        if: success()
-        run: |
-          TAG="v1.0.${{ github.run_number }}"
-          git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor }}@users.noreply.github.com"
-          git tag $TAG
-          git push origin $TAG
+      # 🔒 Désactivé car GitHub ne permet pas le push de tag par défaut
+      # - name: Create Git Tag
+      #   if: success()
+      #   run: |
+      #     TAG="v1.0.${{ github.run_number }}"
+      #     git config user.name "${{ github.actor }}"
+      #     git config user.email "${{ github.actor }}@users.noreply.github.com"
+      #     git tag $TAG
+      #     git push origin $TAG
