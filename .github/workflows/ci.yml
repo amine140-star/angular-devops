@@ -1,0 +1,43 @@
+name: CI for Angular App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint code
+        run: npm run lint || echo "Lint errors, but continue"
+
+      - name: Run tests
+        run: npm test -- --watch=false --browsers=ChromeHeadless
+
+      - name: Build Angular app
+        run: npm run build
+
+      - name: Simulate deployment
+        run: echo "docker push mon-image-angular && docker run mon-image-angular"
+
+      - name: Create Git Tag
+        if: success()
+        run: |
+          TAG="v1.0.${{ github.run_number }}"
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git tag $TAG
+          git push origin $TAG
