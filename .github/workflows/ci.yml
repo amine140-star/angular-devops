@@ -32,13 +32,3 @@ jobs:
 
       - name: Simulate deployment
         run: echo "docker push angular-devops && docker run angular-devops"
-
-      # 🔒 Désactivé car GitHub ne permet pas le push de tag par défaut
-      # - name: Create Git Tag
-      #   if: success()
-      #   run: |
-      #     TAG="v1.0.${{ github.run_number }}"
-      #     git config user.name "${{ github.actor }}"
-      #     git config user.email "${{ github.actor }}@users.noreply.github.com"
-      #     git tag $TAG
-      #     git push origin $TAG
